@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Coroutines</string>
+    <string name="text_tabs">0 tabs</string>
+    <string name="text_title">title</string>
 </resources>
