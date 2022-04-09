@@ -1,0 +1,224 @@
+Index: app/build.gradle
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>plugins {\n    id 'com.android.application'\n    id 'org.jetbrains.kotlin.android'\n}\n\nandroid {\n    compileSdk 32\n\n    defaultConfig {\n        applicationId \"com.example.coroutines\"\n        minSdk 23\n        targetSdk 32\n        versionCode 1\n        versionName \"1.0\"\n\n        testInstrumentationRunner \"androidx.test.runner.AndroidJUnitRunner\"\n    }\n\n    buildTypes {\n        release {\n            minifyEnabled false\n            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'\n        }\n    }\n    compileOptions {\n        sourceCompatibility JavaVersion.VERSION_1_8\n        targetCompatibility JavaVersion.VERSION_1_8\n    }\n    kotlinOptions {\n        jvmTarget = '1.8'\n    }\n}\n\ndependencies {\n\n    implementation 'androidx.core:core-ktx:1.7.0'\n    implementation 'androidx.appcompat:appcompat:1.4.1'\n    implementation 'com.google.android.material:material:1.5.0'\n    implementation 'androidx.constraintlayout:constraintlayout:2.1.3'\n    testImplementation 'junit:junit:4.13.2'\n    androidTestImplementation 'androidx.test.ext:junit:1.1.3'\n    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'\n\n    implementation(\"androidx.lifecycle:lifecycle-livedata-ktx:2.4.1\")\n    implementation(\"androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.1\")\n\n\n    //Coroutines\n    implementation(\"org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.0\")\n\n\n    //Retrofit\n    implementation 'com.squareup.retrofit2:retrofit:2.9.0'\n    implementation 'com.squareup.retrofit2:converter-gson:2.1.0'\n    implementation \"com.squareup.okhttp3:logging-interceptor:4.5.0\"\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/build.gradle b/app/build.gradle
+--- a/app/build.gradle	(revision 56d90119604ca72262ed8f7831e7df789a6e9b5e)
++++ b/app/build.gradle	(date 1649236716520)
+@@ -34,6 +34,7 @@
+ dependencies {
+ 
+     implementation 'androidx.core:core-ktx:1.7.0'
++    implementation 'androidx.activity:activity-ktx:1.4.0'
+     implementation 'androidx.appcompat:appcompat:1.4.1'
+     implementation 'com.google.android.material:material:1.5.0'
+     implementation 'androidx.constraintlayout:constraintlayout:2.1.3'
+Index: app/src/main/java/com/example/coroutines/data/network/model/Quote.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/coroutines/data/network/model/Quote.kt b/app/src/main/java/com/example/coroutines/data/network/model/Quote.kt
+deleted file mode 100644
+--- a/app/src/main/java/com/example/coroutines/data/network/model/Quote.kt	(revision 56d90119604ca72262ed8f7831e7df789a6e9b5e)
++++ /dev/null	(revision 56d90119604ca72262ed8f7831e7df789a6e9b5e)
+@@ -1,6 +0,0 @@
+-package com.example.coroutines.data.network.model
+-
+-data class Quote(
+-    val _id: String,
+-    val content: String
+-)
+\ No newline at end of file
+Index: app/src/main/java/com/example/coroutines/data/network/QuoteApi.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.coroutines.data.network\n\nimport com.example.coroutines.data.network.model.Quote\nimport retrofit2.Response\nimport retrofit2.http.GET\n\ninterface QuoteApi {\n\n    @GET(\"/random\")\n    suspend fun getQuote(): Response<Quote>\n\n}\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/coroutines/data/network/QuoteApi.kt b/app/src/main/java/com/example/coroutines/data/network/QuoteApi.kt
+--- a/app/src/main/java/com/example/coroutines/data/network/QuoteApi.kt	(revision 56d90119604ca72262ed8f7831e7df789a6e9b5e)
++++ b/app/src/main/java/com/example/coroutines/data/network/QuoteApi.kt	(date 1649243746304)
+@@ -6,7 +6,7 @@
+ 
+ interface QuoteApi {
+ 
+-    @GET("/random")
++    @GET("get")
+     suspend fun getQuote(): Response<Quote>
+ 
+ }
+Index: app/src/main/java/com/example/coroutines/data/network/RetrofitInstance.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.coroutines.data.network\n\nimport retrofit2.Retrofit\nimport retrofit2.converter.gson.GsonConverterFactory\n\nobject RetrofitInstance {\n\n    private val retrofit by lazy {\n        Retrofit.Builder()\n            .baseUrl(\"http://api.quotable.io\")\n            .addConverterFactory(GsonConverterFactory.create())\n            .build()\n    }\n\n    val api : QuoteApi by lazy {\n      retrofit.create(QuoteApi::class.java)\n    }\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/coroutines/data/network/RetrofitInstance.kt b/app/src/main/java/com/example/coroutines/data/network/RetrofitInstance.kt
+--- a/app/src/main/java/com/example/coroutines/data/network/RetrofitInstance.kt	(revision 56d90119604ca72262ed8f7831e7df789a6e9b5e)
++++ b/app/src/main/java/com/example/coroutines/data/network/RetrofitInstance.kt	(date 1649243746016)
+@@ -7,7 +7,7 @@
+ 
+     private val retrofit by lazy {
+         Retrofit.Builder()
+-            .baseUrl("http://api.quotable.io")
++            .baseUrl("https://fish-text.ru/")
+             .addConverterFactory(GsonConverterFactory.create())
+             .build()
+     }
+Index: app/src/main/java/com/example/coroutines/data/network/QuoteRepository.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.coroutines.data.network\n\nimport com.example.coroutines.data.network.model.Quote\nimport kotlinx.coroutines.CoroutineScope\nimport kotlinx.coroutines.Dispatchers\nimport kotlinx.coroutines.async\nimport kotlinx.coroutines.launch\nimport retrofit2.Response\n\n\nclass QuoteRepository {\n\n    suspend fun getQuote(): Response<Quote> {\n\n        return RetrofitInstance.api.getQuote()\n    }\n\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/coroutines/data/network/QuoteRepository.kt b/app/src/main/java/com/example/coroutines/data/network/QuoteRepository.kt
+--- a/app/src/main/java/com/example/coroutines/data/network/QuoteRepository.kt	(revision 56d90119604ca72262ed8f7831e7df789a6e9b5e)
++++ b/app/src/main/java/com/example/coroutines/data/network/QuoteRepository.kt	(date 1649243746140)
+@@ -1,18 +1,13 @@
+ package com.example.coroutines.data.network
+ 
+-import com.example.coroutines.data.network.model.Quote
+-import kotlinx.coroutines.CoroutineScope
+ import kotlinx.coroutines.Dispatchers
+-import kotlinx.coroutines.async
+-import kotlinx.coroutines.launch
+-import retrofit2.Response
++import kotlinx.coroutines.withContext
+ 
+ 
+ class QuoteRepository {
+ 
+-    suspend fun getQuote(): Response<Quote> {
+-
+-        return RetrofitInstance.api.getQuote()
++    suspend fun getQuote(): String = withContext(Dispatchers.IO) {
++        RetrofitInstance.api.getQuote().body()?.text    ?:"empty"
+     }
+ 
+ }
+\ No newline at end of file
+Index: app/src/main/java/com/example/coroutines/MainViewModelFactory.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/coroutines/MainViewModelFactory.kt b/app/src/main/java/com/example/coroutines/MainViewModelFactory.kt
+new file mode 100644
+--- /dev/null	(date 1649237406158)
++++ b/app/src/main/java/com/example/coroutines/MainViewModelFactory.kt	(date 1649237406158)
+@@ -0,0 +1,16 @@
++package com.example.coroutines
++
++import androidx.lifecycle.ViewModel
++import androidx.lifecycle.ViewModelProvider
++import com.example.coroutines.data.network.QuoteRepository
++
++class MainViewModelFactory(private val repository: QuoteRepository) : ViewModelProvider.Factory {
++
++    override fun <T : ViewModel> create(modelClass: Class<T>): T {
++        if (modelClass.isAssignableFrom(MainViewModel::class.java)) {
++            @Suppress("UNCHECKED_CAST")
++            return MainViewModel(repository) as T
++        }
++        throw IllegalArgumentException("Unknown ViewModel class")
++    }
++}
+\ No newline at end of file
+Index: app/src/main/java/com/example/coroutines/MainViewModel.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.coroutines\n\nimport androidx.lifecycle.MutableLiveData\nimport androidx.lifecycle.ViewModel\nimport androidx.lifecycle.viewModelScope\nimport kotlinx.coroutines.launch\n\nclass MainViewModel : ViewModel() {\n\n    val tabs: MutableLiveData<Int> = MutableLiveData()\n\n    var tabsCount = 0\n\n    fun updateTabs() {\n        viewModelScope.launch {\n            tabsCount++\n            tabs.postValue(tabsCount)\n        }\n    }\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/coroutines/MainViewModel.kt b/app/src/main/java/com/example/coroutines/MainViewModel.kt
+--- a/app/src/main/java/com/example/coroutines/MainViewModel.kt	(revision 56d90119604ca72262ed8f7831e7df789a6e9b5e)
++++ b/app/src/main/java/com/example/coroutines/MainViewModel.kt	(date 1649243746228)
+@@ -3,11 +3,13 @@
+ import androidx.lifecycle.MutableLiveData
+ import androidx.lifecycle.ViewModel
+ import androidx.lifecycle.viewModelScope
++import com.example.coroutines.data.network.QuoteRepository
+ import kotlinx.coroutines.launch
+ 
+-class MainViewModel : ViewModel() {
++class MainViewModel(private val repository: QuoteRepository) : ViewModel() {
+ 
+     val tabs: MutableLiveData<Int> = MutableLiveData()
++    val title: MutableLiveData<String> = MutableLiveData()
+ 
+     var tabsCount = 0
+ 
+@@ -17,4 +19,10 @@
+             tabs.postValue(tabsCount)
+         }
+     }
++
++    fun updateContent() {
++        viewModelScope.launch {
++            title.postValue(repository.getQuote())
++        }
++    }
+ }
+\ No newline at end of file
+Index: app/src/main/java/com/example/coroutines/MainActivity.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.coroutines\n\nimport androidx.appcompat.app.AppCompatActivity\nimport android.os.Bundle\nimport android.widget.TextView\nimport androidx.constraintlayout.widget.ConstraintLayout\nimport androidx.lifecycle.ViewModelProvider\n\nclass MainActivity : AppCompatActivity() {\n    override fun onCreate(savedInstanceState: Bundle?) {\n        super.onCreate(savedInstanceState)\n        setContentView(R.layout.activity_main)\n\n        val viewModel = ViewModelProvider(this).get(MainViewModel::class.java)\n\n        val mainLayout : ConstraintLayout = findViewById(R.id.main_layout)\n        val tabs : TextView = findViewById(R.id.tv_taps)\n        val title : TextView = findViewById(R.id.tv_title)\n\n        mainLayout.setOnClickListener {\n            viewModel.updateTabs()\n        }\n\n        viewModel.tabs.observe(this) {\n            value ->\n            tabs.text = \"$value tabs\"\n        }\n    }\n\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/coroutines/MainActivity.kt b/app/src/main/java/com/example/coroutines/MainActivity.kt
+--- a/app/src/main/java/com/example/coroutines/MainActivity.kt	(revision 56d90119604ca72262ed8f7831e7df789a6e9b5e)
++++ b/app/src/main/java/com/example/coroutines/MainActivity.kt	(date 1649237654723)
+@@ -3,28 +3,35 @@
+ import androidx.appcompat.app.AppCompatActivity
+ import android.os.Bundle
+ import android.widget.TextView
++import androidx.activity.viewModels
+ import androidx.constraintlayout.widget.ConstraintLayout
+-import androidx.lifecycle.ViewModelProvider
++import com.example.coroutines.data.network.QuoteRepository
+ 
+ class MainActivity : AppCompatActivity() {
+     override fun onCreate(savedInstanceState: Bundle?) {
+         super.onCreate(savedInstanceState)
+         setContentView(R.layout.activity_main)
+ 
+-        val viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
++        val viewModel: MainViewModel by viewModels {
++            MainViewModelFactory(QuoteRepository())
++        }
+ 
+-        val mainLayout : ConstraintLayout = findViewById(R.id.main_layout)
+-        val tabs : TextView = findViewById(R.id.tv_taps)
+-        val title : TextView = findViewById(R.id.tv_title)
++        val mainLayout: ConstraintLayout = findViewById(R.id.main_layout)
++        val tabs: TextView = findViewById(R.id.tv_taps)
++        val title: TextView = findViewById(R.id.tv_title)
+ 
+         mainLayout.setOnClickListener {
+             viewModel.updateTabs()
++            viewModel.updateContent()
+         }
+ 
+-        viewModel.tabs.observe(this) {
+-            value ->
++        viewModel.tabs.observe(this) { value ->
+             tabs.text = "$value tabs"
+         }
++
++        viewModel.title.observe(this) { value ->
++            title.text = value
++        }
+     }
+ 
+ }
+\ No newline at end of file
